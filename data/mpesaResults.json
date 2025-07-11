@@ -1,0 +1,34 @@
+{
+  "ws_CO_10072025155353591111887249": {
+    "MerchantRequestID": "523b-4c6b-ba35-915881b6a63a47888",
+    "CheckoutRequestID": "ws_CO_10072025155353591111887249",
+    "ResultCode": 0,
+    "ResultDesc": "The service request is processed successfully.",
+    "raw": {
+      "MerchantRequestID": "523b-4c6b-ba35-915881b6a63a47888",
+      "CheckoutRequestID": "ws_CO_10072025155353591111887249",
+      "ResultCode": 0,
+      "ResultDesc": "The service request is processed successfully.",
+      "CallbackMetadata": {
+        "Item": [
+          {
+            "Name": "Amount",
+            "Value": 1
+          },
+          {
+            "Name": "MpesaReceiptNumber",
+            "Value": "QHK7RT3X7U"
+          },
+          {
+            "Name": "TransactionDate",
+            "Value": 20250710155611
+          },
+          {
+            "Name": "PhoneNumber",
+            "Value": 254111887249
+          }
+        ]
+      }
+    }
+  }
+}
