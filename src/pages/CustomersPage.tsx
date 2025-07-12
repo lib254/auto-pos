@@ -21,6 +21,13 @@ const CustomersPage = () => {
   const [importError, setImportError] = useState<string | null>(null);
   const { recordTransaction, isOpen } = useRegister();
   const [customerToDelete, setCustomerToDelete] = useState<Customer | null>(null);
+  // Get time based greeting
+  const getTimeBasedGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good Morning";
+    if (hour < 18) return "Good Afternoon";
+    return "Good Evening";
+  };
 
   // M-Pesa modal state
   const [isMpesaModalOpen, setIsMpesaModalOpen] = useState(false);
@@ -215,6 +222,7 @@ const CustomersPage = () => {
                   setCustomers(updatedCustomers);
                   setTransactions(prev => [...prev, transaction]);
                   recordTransaction(transaction);
+
                   // WhatsApp message logic
                   if (selectedCustomer && selectedCustomer.phone) {
                     const phoneW = selectedCustomer.phone.replace(/^0/, '254');
@@ -222,7 +230,7 @@ const CustomersPage = () => {
                     let paymentDetails = `Payment Method: M-Pesa\nM-Pesa Code: ${data.data.CheckoutRequestID}`;
                     const message =
                       `*Everben Enterprises* (Till No: 620432)\n\n` +
-                      `Hello ${selectedCustomer.name},\n\n` +
+                      `Hello ${selectedCustomer.name}, ${getTimeBasedGreeting()},\n\n` +
                       `We have received your payment of Ksh${payment.amount.toFixed(2)}.\n` +
                       `*${paymentDetails}*\n` +
                       `Your new balance is Ksh${newBalance.toFixed(2)}.\n\n` +
@@ -306,6 +314,7 @@ const CustomersPage = () => {
     setCustomers(updatedCustomers);
     setTransactions(prev => [...prev, transaction]);
     recordTransaction(transaction);
+
     // WhatsApp message logic (final fix: only for cash/card, not mobile, and payment.method is always 'cash' or 'card' here)
     if (selectedCustomer && selectedCustomer.phone && (payment.method === 'cash' || payment.method === 'card')) {
       const phoneW = selectedCustomer.phone.replace(/^0/, '254');
@@ -316,7 +325,7 @@ const CustomersPage = () => {
       }
       const message =
         `*Everben Enterprises* (Till No: 620432)\n\n` +
-        `Hello ${selectedCustomer.name},\n\n` +
+        `Hello ${selectedCustomer.name}, ${getTimeBasedGreeting()},\n\n` +
         `We have received your payment of Ksh${payment.amount.toFixed(2)}.\n` +
         `*${paymentDetails}*\n` +
         `Your new balance is Ksh${newBalance.toFixed(2)}.\n\n` +

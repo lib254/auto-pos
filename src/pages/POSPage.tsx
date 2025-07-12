@@ -11,7 +11,6 @@
   import { RetrieveHeldTransactionModal } from '../components/pos/RetrieveHeldTransactionModal';
   import { generateTransactionReference } from '../utils/transactionUtils';
   import toast from 'react-hot-toast';
-import { ca } from 'date-fns/locale';
 
   const POSPage = () => {
     const navigate = useNavigate();
@@ -55,6 +54,7 @@ import { ca } from 'date-fns/locale';
     const [mpesaMessage, setMpesaMessage] = useState<string>('');
     const [mpesaResultDesc, setMpesaResultDesc] = useState<string | null>(null);
     const [mpesaResultCode, setMpesaResultCode] = useState<string | null>(null);
+
 
     useEffect(() => {
       setProducts(storage.getProducts());
@@ -207,29 +207,6 @@ import { ca } from 'date-fns/locale';
                   const failureMessage = statusData.data.message || statusData.data.ResultDesc || 'Payment failed or cancelled.';
                   setMpesaMessage(failureMessage);
 
-                  // Save failed transaction
-                  const transaction = {
-                    id: data.data.CheckoutRequestID,
-                    type: 'sale',
-                    customerId: selectedCustomer?.id,
-                    items: cart,
-                    total: calculateTotal(),
-                    discount,
-                    paymentMethod: 'mobile',
-                    payments: [
-                      {
-                        method: 'mobile',
-                        amount: calculateTotal(),
-                        details: phone
-                      }
-                    ],
-                    paymentDetails: data.data.CheckoutRequestID,
-                    status: 'failed',
-                    createdAt: new Date().toISOString(),
-                    paymentConfirmation: statusData.data,
-                    failureReason: failureMessage
-                  };
-                  storage.setTransactions([...storage.getTransactions(), transaction]);
                   toast.error(failureMessage);
                   setTimeout(() => {
                     setIsMpesaModalOpen(false);
@@ -243,30 +220,7 @@ import { ca } from 'date-fns/locale';
                 setMpesaStatus('failed');
                 const failureMessage = 'Payment not confirmed. Please try again.';
                 setMpesaMessage(failureMessage);
-
-                // Save failed transaction
-                const transaction = {
-                  id: data.data.CheckoutRequestID,
-                  type: 'sale',
-                  customerId: selectedCustomer?.id,
-                  items: cart,
-                  total: calculateTotal(),
-                  discount,
-                  paymentMethod: 'mobile',
-                  payments: [
-                    {
-                      method: 'mobile',
-                      amount: calculateTotal(),
-                      details: phone
-                    }
-                  ],
-                  paymentDetails: data.data.CheckoutRequestID,
-                  status: 'failed',
-                  createdAt: new Date().toISOString(),
-                  paymentConfirmation: statusData.data,
-                  failureReason: failureMessage
-                };
-                storage.setTransactions([...storage.getTransactions(), transaction]);
+                
                 toast.error(failureMessage);
                 setTimeout(() => {
                   setIsMpesaModalOpen(false);
@@ -283,29 +237,6 @@ import { ca } from 'date-fns/locale';
           const failureMessage = 'Error checking payment status. Please try again.';
           setMpesaMessage(failureMessage);
 
-          // Save failed transaction
-          const transaction = {
-            id: 'mpesa-failed-' + Date.now(),
-            type: 'sale',
-            customerId: selectedCustomer?.id,
-            items: cart,
-            total: calculateTotal(),
-            discount,
-            paymentMethod: 'mobile',
-            payments: [
-              {
-                method: 'mobile',
-                amount: calculateTotal(),
-                details: phone
-              }
-            ],
-            paymentDetails: null,
-            status: 'failed',
-            createdAt: new Date().toISOString(),
-            paymentConfirmation: null,
-            failureReason: failureMessage
-          };
-          storage.setTransactions([...storage.getTransactions(), transaction]);
           toast.error(failureMessage);
           setTimeout(() => {
             setIsMpesaModalOpen(false);
@@ -316,7 +247,6 @@ import { ca } from 'date-fns/locale';
         return; // Prevent further processing for M-Pesa
       }
 
-      // ...existing code...
       // Calculate totals
       const subtotal = cart.reduce((sum, item) => {
         const product = products.find(p => p.id === item.productId);
@@ -425,9 +355,16 @@ import { ca } from 'date-fns/locale';
       if (saveAsDebt && messageCustomer && selectedCustomer) {
         const phone = selectedCustomer.phone.replace(/^0/, '254');
         const prevBalance = selectedCustomer.previousBalance || 0;
+        // Get time based greeting
+        const getTimeBasedGreeting = () => {
+          const hour = new Date().getHours();
+          if (hour < 12) return "Good Morning";
+          if (hour < 18) return "Good Afternoon";
+          return "Good Evening";
+        };
         const message =
           `*Everben Enterprises* (Till No: 620432)\n\n` +
-          `Hello ${selectedCustomer.name},\n\n` +
+          `Hello ${selectedCustomer.name}, ${getTimeBasedGreeting()},\n\n` +
           `*Previous Balance:* Ksh${prevBalance.toFixed(2)}\n` +
           `*New Items:*\n` +
           cart.map(item => {
@@ -891,6 +828,4 @@ import { ca } from 'date-fns/locale';
 
   export default POSPage;
 
-function pollPaymentStatus(): void {
-  throw new Error('Function not implemented.');
-}
+
