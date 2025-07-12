@@ -17,9 +17,9 @@ app.use(cors());
 app.use(express.json());
 
 // Import M-Pesa API routes
-import stkPushRouter from './app/api/mpesa/stk-push/routes.js';
-import queryRouter from './app/api/mpesa/query/routes.js';
-import callbackRouter from './app/api/mpesa/callback/routes.js';
+import stkPushRouter from './api/mpesa/stk-push/routes.js';
+import queryRouter from './api/mpesa/query/routes.js';
+import callbackRouter from './api/mpesa/callback/routes.js';
 
 // Mount M-Pesa routes
 app.use('/api/mpesa/stk-push', stkPushRouter);
