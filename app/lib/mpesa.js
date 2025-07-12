@@ -202,7 +202,7 @@ const querySTKPush = async (checkoutRequestID) => {
   // console.log("M-Pesa query result:", result)
 
   if (!ok) {
-    console.error("M-Pesa STK Query Error:", result)
+    // console.error("M-Pesa STK Query Error:", result)
     
     // Check if it's a "still processing" error
     if (result && typeof result === 'object' && result.errorMessage && result.errorMessage.includes("being processed")) {
