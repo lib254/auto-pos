@@ -71,7 +71,7 @@ const initiateSTKPush = async (phoneNumber, amount, accountReference, transactio
   const Password = Buffer.from(`${BusinessShortCode}${PassKey}${Timestamp}`).toString("base64")
 
   // Use the callback URL from environment or construct one
-  const callbackURL = process.env.MPESA_CALLBACK_URL || "https://autoposshop.netlify.app/api/mpesa/callback"
+  const callbackURL = process.env.MPESA_CALLBACK_URL || "https://everben.netlify.app/api/mpesa/callback"
 
   // Format phone number to international format
   const formattedPhone = phoneNumber.startsWith("0")
