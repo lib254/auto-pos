@@ -121,7 +121,7 @@
 
         try {
           // Initiate STK Push
-          const res = await fetch('http://localhost:5000/api/mpesa/stk-push', {
+          const res = await fetch('https://auto-pos-1.onrender.com/api/mpesa/stk-push', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -144,7 +144,7 @@
             const pollPaymentStatus = async () => {
               attempts++;
 
-              const statusRes = await fetch('http://localhost:5000/api/mpesa/query', {
+              const statusRes = await fetch('https://auto-pos-1.onrender.com/api/mpesa/query', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ CheckoutRequestID: data.data.CheckoutRequestID })
